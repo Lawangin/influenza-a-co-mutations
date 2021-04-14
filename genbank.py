@@ -22,9 +22,6 @@ def clean_organism(org):
     return org[11:-1]
 
 
-example_list = ['CY044333', 'CY044524']
-
-
 def scrap_entrez(id):
     handle = Entrez.efetch(db='nucleotide', id=id, rettype='gb', retmode="text")
     data = handle.readline().strip()
@@ -33,7 +30,7 @@ def scrap_entrez(id):
     translated_seq = []
     while data != '':
         if 'organism=' in data:
-            if 'New York' in data:
+            if 'New York' and '/2003(' in data:
                 organism = clean_organism(data)
             else:
                 handle.close()
@@ -56,7 +53,7 @@ for genid in id_list:
         time.sleep(30)
     record = scrap_entrez(genid)
     if record != None:
-        with open('newyork_records.txt', 'a') as writer:
+        with open('newyork_records_2003.txt', 'a') as writer:
             writer.write(record[0])
             writer.write('\n')
             writer.write(record[1])
